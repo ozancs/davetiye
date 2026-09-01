@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//TamayOzan//Davetiye//TR
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:tamay-ozan-nikah-20261003@davetiye
+DTSTAMP:20260901T000000Z
+DTSTART:20261003T124500Z
+DTEND:20261003T134500Z
+SUMMARY:Ozan ve Tamay'ın Nikahı
+LOCATION:Beşiktaş Belediyesi Evlendirme Dairesi\, Türkali Mah. Nüzhetiye Cad. No: 68\, Beşiktaş/İstanbul
+DESCRIPTION:En mutlu günümüzde sizleri aramızda görmekten onur duyarız.
+BEGIN:VALARM
+TRIGGER:-PT2H
+ACTION:DISPLAY
+DESCRIPTION:Nikah hatırlatması
+END:VALARM
+END:VEVENT
+END:VCALENDAR
