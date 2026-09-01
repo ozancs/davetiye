@@ -275,10 +275,26 @@ const ICS = [
   'BEGIN:VALARM','TRIGGER:-PT2H','ACTION:DISPLAY','DESCRIPTION:Nikah hatırlatması','END:VALARM',
   'END:VEVENT','END:VCALENDAR'
 ].join('\r\n');
-const blob = new Blob([ICS], {type:'text/calendar;charset=utf-8'});
 const a = document.getElementById('addcal');
-a.href = URL.createObjectURL(blob);
-a.download = 'ozan-tamay-nikah.ics';
+const isAndroid = /android/i.test(navigator.userAgent);
+const isHosted = location.protocol.startsWith('http');
+if(isAndroid){
+  /* Android: Google Takvim şablonu — uygulama doğrudan açılır */
+  a.href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent("Ozan ve Tamay'ın Nikahı")
+    + '&dates=20261003T124500Z/20261003T134500Z'
+    + '&location=' + encodeURIComponent('Beşiktaş Belediyesi Evlendirme Dairesi, Türkali Mah. Nüzhetiye Cad. No: 68, Beşiktaş/İstanbul')
+    + '&details=' + encodeURIComponent('En mutlu günümüzde sizleri aramızda görmekten onur duyarız.');
+  a.target = '_blank'; a.rel = 'noopener';
+}else if(isHosted){
+  /* iPhone/iPad/Mac: sitedeki .ics — Safari doğrudan takvim önizlemesi açar */
+  a.href = 'nikah.ics';
+}else{
+  /* dosyadan yerel açılışta yedek: indirme */
+  const blob = new Blob([ICS], {type:'text/calendar;charset=utf-8'});
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ozan-tamay-nikah.ics';
+}
 
 /* ---------- yumuşak fon müziği (Web Audio, telifsiz) ---------- */
 let AC=null, master=null, musicOn=false, schedTimer=null, step=0;
@@ -345,6 +361,13 @@ mBtn.addEventListener('click', ()=>setMusic(!musicOn));
 /* tarayıcılar sesli otomatik oynatmayı engeller: ilk dokunuşta nazikçe başlat */
 function firstTouch(){ setMusic(true); document.removeEventListener('pointerdown', firstTouch); }
 document.addEventListener('pointerdown', firstTouch);
+/* izin veren tarayıcıda otomatik başlat */
+(function(){
+  try{
+    audioInit();
+    AC.resume().then(()=>{ if(AC.state==='running'){ setMusic(true); } });
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
